@@ -1,6 +1,6 @@
 
-<!--<h2>La liste des associations</h2>
-<div style="float: right;">
+<h2>La liste des associations</h2>
+<div style="float: right;"> 
   <div style="display: inline-block; margin-right: 10px;">
     <button class="btn btn-secondary" (click)="showFilter()">Filtre<span class="ti-filter"></span></button>
   </div>
@@ -83,8 +83,8 @@
         <td class="py-1" *ngIf="showAdresse">{{association.adresse}}</td>
         <td class="py-1" *ngIf="showType">{{association.type}}</td>
         <td class="py-1" *ngIf="showEmail">{{association.email}}</td>
-         <td *ngIf="showTel">{{employeurToDisplayDetails.nom}}</td> -->
-       <!--> <td class="py-1" *ngIf="showPays">{{association.pays}}</td>
+         <td *ngIf="showTel">{{associationToDisplayDetails.nom}}</td> 
+         <td class="py-1" *ngIf="showPays">{{association.pays}}</td>
         <td class="py-1" *ngIf="showFondation">{{association.fondation}}</td>
         <td *ngIf="showAjout">{{association.dateAjout }}</td>
         <td *ngIf="showModification">{{association.dateModif }}</td>
@@ -97,9 +97,9 @@
       </tr>
     </tbody>
   </table>
-</div>-->
+</div>
 <!---------------------------------------------------delete modal*******************************-->
-<!--<ng-template #deleteTemplate>
+<ng-template #deleteTemplate>
   <div class="modal-header">
     <h4 class="modal-title pull-left">Suppression d'association {{associationToDelete.nom}}</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
@@ -113,10 +113,10 @@
     <button type="button" class="btn btn-primary" (click)="deleteAssociation()">OUI</button>
     <button type="button" class="btn btn-danger" (click)="bsModalRef.hide()">NON</button>
   </div>
-</ng-template>-->
+</ng-template> -->
 
 <!---------------------------------------------------info modal*******************************-->
-<!--<ng-template #infoTemplate>
+ <ng-template #infoTemplate>
   <div class="modal-header">
     <h4 class="modal-title pull-left">Détails de l'association {{associationToDisplayDetails.nom}}</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
@@ -134,11 +134,11 @@
             <div class="card-block px-3">
               <b>Nom: </b>{{associationToDisplayDetails.nom}}<br>
               <b>Présentation: </b>{{associationToDisplayDetails.presentation}}<br>
-              <b>Site web: </b>{{associationemployeurToDisplayDetails.site}}<br>
+              <b>Site web: </b>{{associationToDisplayDetails.site}}<br>
               <b>Taille: </b>{{associationToDisplayDetails.taille}}<br>
-              <b>Adresse: </b>{{associationToDisplayDetails.adresse}}<br>-->
-              <!-- <b>Numéro de telephone: </b>+201625353654<br> -->
-             <!--> <b>Type: </b>{{associationToDisplayDetails.type}}<br>
+              <b>Adresse: </b>{{associationToDisplayDetails.adresse}}<br>
+              <b>Numéro de telephone: </b>+201625353654<br>
+             <b>Type: </b>{{associationToDisplayDetails.type}}<br>
               <b>Fondation: </b>{{associationToDisplayDetails.fondation}}<br>
               <b>Email: </b>{{associationToDisplayDetails.email}}<br>
               <b>Pays: </b>{{associationToDisplayDetails.pays}}<br>
@@ -151,10 +151,10 @@
       </div>
     </div>
   </div>
-</ng-template>
--->
+</ng-template> 
+
 <!---------------------------------------------------reglage modal*******************************-->
-<!--<ng-template #reglageTemplate>
+ <ng-template #reglageTemplate>
   <div class="modal-header">
     <h4 class="modal-title pull-left">Selectionnez les colonnes à afficher dans la table</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
@@ -242,5 +242,4 @@
         Date de modification
         <i class="input-helper"></i></label>
     </div>
-  </div>
-</ng-template>-->
+  </div> </ng-template>   

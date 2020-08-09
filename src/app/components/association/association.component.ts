@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { ToastrService } from 'ngx-toastr';
+import { AssociationService } from 'src/app/services/association.service';
 
 @Component({
   selector: 'app-association',
@@ -7,15 +9,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./association.component.css']
 })
 export class AssociationComponent implements OnInit {
-  constructor() { }
+  constructor(private modalService: BsModalService,private toastr: ToastrService, private associationService: AssociationService) { }
 
   ngOnInit() {
   }
-/*
+
   filter = false;
   showEmail = false;
   showAjout = false;
   showNom = true;
+  bsModalRef: BsModalRef;
   showPresentation = true;
   showTaille = true;
   showSite = true;
@@ -27,8 +30,8 @@ export class AssociationComponent implements OnInit {
   showLogo = true;
   showModification = false;
   associationToDelete;
-  employeurs;
-  employeurToDisplayDetails;
+  associations;
+  associationToDisplayDetails;
   nomFilter = '';
   presentationFilter = '';
   siteFilter = '';
@@ -58,8 +61,8 @@ export class AssociationComponent implements OnInit {
     this.bsModalRef = this.modalService.show(template, { class: 'modal-lg' });
   }
 
-  deleteEmployeur() {
-    this.associationService.deleteAssociation(this.employeurToDelete.id).subscribe(res => {
+  deleteAssociation() {
+    this.associationService.deleteAssociation(this.associationToDelete.id).subscribe(res => {
       this.bsModalRef.hide();
       this.toastr.success('Succés!', 'Employeur supprimé avec succés!');
       this.getAll();
@@ -69,9 +72,9 @@ export class AssociationComponent implements OnInit {
   }
 
   getAll() {
-    this.employeurService.getAll().subscribe(res => {
-      this.employeurs = res;
+    this.associationService.getAll().subscribe(res => {
+      this.associations = res;
     });
-  }*/
+  }
 
 }

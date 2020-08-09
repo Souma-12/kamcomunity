@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { AssociationService } from './association.service';
 
 describe('AssociationService', () => {

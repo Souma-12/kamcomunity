@@ -41,7 +41,9 @@ export class LoginComponent implements OnInit {
 
     this.loginservice.authenticate(this.formLogin.controls.username.value, this.formLogin.controls.password.value).subscribe(
       data => {
-        this.router.navigate([''])
+        console.log("zzz",data);
+
+        this.router.navigate(['/'])
         this.invalidLogin = false
       },
       error => {
