@@ -1,0 +1,399 @@
+<h2>La liste des admins</h2>
+<div style="float: right;">
+  <div style="display: inline-block; margin-right: 10px;">
+    <button class="btn btn-success" (click)="showAddModal(addTemplate)">Ajouter admin</button>
+  </div>
+  <div style="display: inline-block; margin-right: 10px;">
+    <button class="btn btn-secondary" (click)="showFilter()">Filtre<span class="ti-filter"></span></button>
+  </div>
+  <div style="display: inline-block;">
+    <button class="btn btn-warning" (click)="changeSettings(reglageTemplate)">Réglage <span
+        class="ti-settings"></span></button>
+  </div>
+
+</div>
+<div style="width:100%; margin-top: 50px;">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th *ngIf="showNom">
+          <ng-container *ngIf="!filter">Nom</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Nom" [(ngModel)]="nomFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showPrenom">
+          <ng-container *ngIf="!filter">Prenom</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Prenom" [(ngModel)]="prenomFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showAdresse">
+          <ng-container *ngIf="!filter">adresse</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Adresse" [(ngModel)]="adresseFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showEmail">
+          <ng-container *ngIf="!filter">email</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Email" [(ngModel)]="emailFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showTel">
+          <ng-container *ngIf="!filter">Telephone</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Telephone" [(ngModel)]="telFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showNationnalite">
+          <ng-container *ngIf="!filter">Nationnalite</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Nationnalite" [(ngModel)]="nationnaliteFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showLangue">
+          <ng-container *ngIf="!filter">Langue</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Langue" [(ngModel)]="langueFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showPassword">
+          <ng-container *ngIf="!filter">Password</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Password" [(ngModel)]="passwordFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+
+        <th *ngIf="showAjout">
+          <ng-container *ngIf="!filter">Date d'ajout</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Date d'ajout" [(ngModel)]="dateAjoutFilter"
+              [ngModelOptions]="{standalone: true}" #dtajout="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showModification">
+          <ng-container *ngIf="!filter">Date de modification</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Date de modification" [(ngModel)]="dateFinFilter"
+              [ngModelOptions]="{standalone: true}" #dtmodif="ngModel"></ng-container>
+        </th>
+        <th> Action</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let admin of admins | filterNomAdmin:nomFilter| filterPrenomAdmin:prenomFilter| 
+      filterEmailAdmin:emailFilter| filterNationnaliteAdmin:nationnaliteFilter| 
+      filterAdresseAdmin:adresseFilter| filterTelephoneAdmin:telFilter|
+       filterLangueAdmin:langueFilter|filterAjoutAdmin:dateAjoutFilter|filterModifAdmin:dateFinFilter
+       |filterPasswordAdmin:passwordFilter">
+        <td class="py-1" *ngIf="showNom">{{admin.nom}}</td>
+        <td *ngIf="showPrenom">{{admin.prenom}}</td>
+        <td *ngIf="showAdresse">{{admin.adresse}}</td>
+        <td *ngIf="showEmail">{{admin.email}}</td>
+        <td *ngIf="showTel">{{admin.telephone}}</td>
+        <td *ngIf="showNationnalite">{{admin.nationnalite}}</td>
+        <td *ngIf="showLangue">{{admin.langue}}</td>
+        <td *ngIf="showPassword">{{admin.password}}</td>
+        <td *ngIf="showAjout">{{admin.dateAjout | date : 'yyyy-MM-dd'}}</td>
+        <td *ngIf="showModification">{{admin.dateModif | date : 'yyyy-MM-dd'}}</td>
+        <td>
+          <span title="Modifier" class="fa fa-edit" style="cursor: pointer; margin-right:20px;color:green"
+            (click)="showUpdateModal(updateTemplate, admin)"></span>
+          <span title="Supprimer" class="fa fa-trash" style="cursor: pointer;  margin-right:20px; color: red;"
+            (click)="showDeleteModal(deleteTemplate, admin)"></span>
+          <span title="Message" class="fa fa-comments" style="cursor: pointer;  margin-right:10px;  color: blue;"
+            (click)="showMessageModel(msgTemplate,admin)"></span>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!--****************************************Add modal**********************************-->
+<ng-template #addTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Ajout d'un admin</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide(); tryToSubmit=false;">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Nom" aria-label="Nom" nom="ngModel"
+      [(ngModel)]="adminToAdd.nom" required #intitAdd="ngModel">
+    <div *ngIf="intitAdd.errors && (intitAdd.dirty || intitAdd.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Prenom" aria-label="Prenom" prenom="ngModel"
+      [(ngModel)]="adminToAdd.prenom" required #intitAdd="ngModel">
+    <div *ngIf="intitAdd.errors && (intitAdd.dirty || intitAdd.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Adresse" aria-label="Adresse" adresse="ngModel"
+      [(ngModel)]="adminToAdd.adresse" required #intitAdd="ngModel">
+    <div *ngIf="intitAdd.errors && (intitAdd.dirty || intitAdd.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Email" aria-label="Email" email="ngModel"
+      [(ngModel)]="adminToAdd.email" required #intitAdd="ngModel">
+    <div *ngIf="intitAdd.errors && (intitAdd.dirty || intitAdd.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Telephone" aria-label="Telephone"
+      telephone="ngModel" [(ngModel)]="adminToAdd.telephone" required #intitAdd="ngModel">
+    <div *ngIf="intitAdd.errors && (intitAdd.dirty || intitAdd.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Nationnalite" aria-label="Nationnalite"
+      nationnalite="ngModel" [(ngModel)]="adminToAdd.nationnalite" required #intitAdd="ngModel">
+    <div *ngIf="intitAdd.errors && (intitAdd.dirty || intitAdd.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Langue" aria-label="Langue"
+      nationnalite="ngModel" [(ngModel)]="adminToAdd.langue" required #intitAdd="ngModel">
+    <div *ngIf="intitAdd.errors && (intitAdd.dirty || intitAdd.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Password" aria-label="Password" email="ngModel"
+      [(ngModel)]="adminToAdd.password" required #intitAdd="ngModel">
+    <div *ngIf="intitAdd.errors && (intitAdd.dirty || intitAdd.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="date" class="form-control form-control-sm" placeholder="dateAjout" aria-label="dateAjout"
+      [(ngModel)]="adminToAdd.dateAjout" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="addAdmin()">Ajouter</button>
+    <button type="button" class="btn btn-danger" (click)="bsModalRef.hide(); tryToSubmit=false;">Annuler</button>
+  </div>
+</ng-template>
+<!---------------------------------------------------update modal*******************************-->
+<ng-template #updateTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modification d'un admin {{adminToUpdate.nom}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close"
+      (click)="bsModalRef.hide(); this.tryToSubmit = false">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Nom" aria-label="Nom"
+      [(ngModel)]="adminToUpdate.nom" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Prenom" aria-label="Prenom"
+      [(ngModel)]="adminToUpdate.prenom" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Adresse" aria-label="Adresse"
+      [(ngModel)]="adminToUpdate.adresse" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Email" aria-label="Email"
+      [(ngModel)]="adminToUpdate.email" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Password" aria-label="Password"
+      [(ngModel)]="adminToUpdate.password" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Telephone" aria-label="Telephone"
+      [(ngModel)]="adminToUpdate.telephone" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Nationnalite" aria-label="Nationnalite"
+      [(ngModel)]="adminToUpdate.nationnalite" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Langue" aria-label="Langue"
+      [(ngModel)]="adminToUpdate.langues" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="updateAdmin()">Modifier</button>
+    <button type="button" class="btn btn-danger" (click)="bsModalRef.hide()">Annuler</button>
+  </div>
+</ng-template>
+<!---------------------------------------------------delete modal*******************************-->
+<ng-template #deleteTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Suppression d'un admin{{adminToDelete.nom}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    Vous étes sure de supprimer l'admin {{adminToDelete.nom}}?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="deleteAdmin()">OUI</button>
+    <button type="button" class="btn btn-danger" (click)="bsModalRef.hide()">NON</button>
+  </div>
+</ng-template>
+
+<!---------------------------------------------------reglage modal*******************************-->
+<ng-template #reglageTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Selectionnez les colonnes à afficher dans la table</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showNom" [ngModelOptions]="{standalone: true}">
+        Nom
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showPrenom" [ngModelOptions]="{standalone: true}">
+        Prenom
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showAdresse" [ngModelOptions]="{standalone: true}">
+        Adresse
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showEmail" [ngModelOptions]="{standalone: true}">
+        Email
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showPassword" [ngModelOptions]="{standalone: true}">
+        Password
+        <i class="input-helper"></i></label>
+    </div>
+
+   
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showTel" [ngModelOptions]="{standalone: true}">
+        Telephone
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showNationnalite"
+          [ngModelOptions]="{standalone: true}">
+        Nationnalite
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showLangue" [ngModelOptions]="{standalone: true}">
+        Langue
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showAjout" [ngModelOptions]="{standalone: true}">
+        Date d'ajout
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showModification"
+          [ngModelOptions]="{standalone: true}">
+        Date de modification
+        <i class="input-helper"></i></label>
+    </div>
+  </div>
+</ng-template>
+<!---------------------------------------------------message modal*******************************-->
+
+<ng-template #msgTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Envoyer un message</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide(); tryToSubmit=false;">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="message" aria-label="message"
+      intitule="ngModel" [(ngModel)]="message" required #messageAdd="ngModel">
+    <div *ngIf="messageAdd.errors && (messageAdd.dirty || messageAdd.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="sendMessage()">Envoyer</button>
+    <button type="button" class="btn btn-danger" (click)="bsModalRef.hide(); tryToSubmit=false;">Annuler</button>
+  </div>
+</ng-template>

@@ -1,7 +1,9 @@
 export class Don {
-    id;
+	id;
+	id_utilisateur;
+	id_association;
 	montant;
-	date_creation;
+	dateAjout;
 	description;
    
 }

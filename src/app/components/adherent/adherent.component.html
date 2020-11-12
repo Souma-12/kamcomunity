@@ -1,0 +1,335 @@
+<h2>La liste des adherents</h2>
+<div style="float: right;">
+ 
+  <div style="display: inline-block; margin-right: 10px;">
+    <button class="btn btn-secondary" (click)="showFilter()">Filtre<span class="ti-filter"></span></button>
+  </div>
+  <div style="display: inline-block;">
+    <button class="btn btn-warning" (click)="changeSettings(reglageTemplate)">Réglage <span
+        class="ti-settings"></span></button>
+  </div>
+
+</div>
+<div style="width:100%; margin-top: 50px;">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th *ngIf="showPhoto">
+          <ng-container>Photo</ng-container>
+        </th>
+        <th *ngIf="showNom">
+          <ng-container *ngIf="!filter">Nom</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Nom" [(ngModel)]="nomFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showPrenom">
+          <ng-container *ngIf="!filter">Prenom</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Prenom" [(ngModel)]="prenomFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showAdresse">
+          <ng-container *ngIf="!filter">adresse</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Adresse" [(ngModel)]="adresseFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showEmail">
+          <ng-container *ngIf="!filter">email</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Email" [(ngModel)]="emailFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showTel">
+          <ng-container *ngIf="!filter">Telephone</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Telephone" [(ngModel)]="telFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showNationnalite">
+          <ng-container *ngIf="!filter">Nationnalite</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Nationnalite" [(ngModel)]="nationnaliteFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showLangue">
+          <ng-container *ngIf="!filter">Langue</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Langue" [(ngModel)]="langueFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+       
+        <th *ngIf="showAjout">
+          <ng-container *ngIf="!filter">Date d'ajout</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Date d'ajout" [(ngModel)]="dateAjoutFilter"
+              [ngModelOptions]="{standalone: true}" #dtajout="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showModification">
+          <ng-container *ngIf="!filter">Date de modification</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Date de modification" [(ngModel)]="dateFinFilter"
+              [ngModelOptions]="{standalone: true}" #dtmodif="ngModel"></ng-container>
+        </th>
+        <th> Action</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let adherent of adherents | filterNomAdherent:nomFilter| filterPrenomAdherent:prenomFilter| 
+      filterEmailAdherent:emailFilter| filterNationnaliteAdherent:nationnaliteFilter| 
+      filterAdresseAdherent:adresseFilter| filterTelephoneAdherent:telFilter|
+       filterLangueAdherent:langueFilter|filterModifAdherent:dateFinFilter|filterPhotoAdherent:photoFilter">
+       <td class="py-1" *ngIf="showPhoto">
+        <img src="data:image/jpg;base64,{{adherent.photo}}" *ngIf="adherent && adherent.photo" alt="image" class="zoom"
+          style="width:30px; height:30px;">
+        <img src="../../../assets/images/faces/face1.jpg" *ngIf="!adherent.photo || !adherent" alt="image" class="zoom">
+      </td>
+        <td class="py-1" *ngIf="showNom">{{adherent.nom}}</td>
+        <td *ngIf="showPhoto">{{adherent.photo}}</td>
+        <td *ngIf="showPrenom">{{adherent.prenom}}</td>
+        <td *ngIf="showAdresse">{{adherent.adresse}}</td>
+        <td *ngIf="showEmail">{{adherent.email}}</td>
+        <td *ngIf="showTel">{{adherent.telephone}}</td>
+        <td *ngIf="showNationnalite">{{adherent.nationnalite}}</td>
+        <td *ngIf="showLangue">{{adherent.langue}}</td>
+        <!-- <td *ngIf="showPassword">{{adherent.password}}</td> -->
+        <td *ngIf="showAjout">{{adherent.dateAjout | date : 'yyyy-MM-dd'}}</td>
+        <td *ngIf="showModification">{{adherent.dateModif | date : 'yyyy-MM-dd'}}</td>
+        <td>
+          <span title="Modifier" class="fa fa-edit" style="cursor: pointer; margin-right:20px;color:green"
+            (click)="showUpdateModal(updateTemplate, adherent)"></span>
+          <span title="Supprimer" class="fa fa-trash" style="cursor: pointer; margin-right:20px; color: red;"
+            (click)="showDeleteModal(deleteTemplate, adherent)"></span>
+            <span title="Détails" class="fa fa-info" style="cursor: pointer; color: blue;"
+            (click)="showInfoModal(infoTemplate, adherent)"></span>
+          <span title="Message" class="fa fa-comments" style="cursor: pointer;margin-right:20px;  color: blue;"
+            (click)="showMessageModel(msgTemplate,adherent)"></span>
+
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!--****************************************info modal**********************************-->
+ <ng-template #infoTemplate> 
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Détails de l'Adherent {{adherentToDisplayDetails.nom}} {{adherentToDisplayDetails.prnom}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container py-3" style="width:100%;">
+      <div class="card">
+        <div class="row ">
+          <div class="col-md-5">
+            <img *ngIf="adherentToDisplayDetails.photo"  src="data:image/jpg;base64,{{adherentToDisplayDetails.photo}}" style="width:320px;">
+            <img *ngIf="!adherentToDisplayDetails.photo"  src="../../../assets/images/faces/face21.jpg" style="width:320px;">
+          </div>
+          <div class="col-md-7 px-3">
+            <div class="card-block px-3">
+              <b>Nom: </b>{{adherentToDisplayDetails.nom}}<br>
+              <b>Prénom: </b>{{adherentToDisplayDetails.prenom}}<br>
+              <b>Adresse: </b>{{adherentToDisplayDetails.adresse}}<br>
+              <b>Numéro de telephone: </b>{{adherentToDisplayDetails.telephone}}<br>
+              <b>Date de naissance: </b>{{adherentToDisplayDetails.dateNaissance}}<br>
+              <b>Email: </b>{{adherentToDisplayDetails.email}}<br>
+              <b>Nationalité: </b>{{adherentToDisplayDetails.nationnalite}}<br>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template> 
+
+<!---------------------------------------------------update modal*******************************-->
+<ng-template #updateTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modification d'un adherent {{adherentToUpdate.nom}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close"
+      (click)="bsModalRef.hide(); this.tryToSubmit = false">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Nom" aria-label="Nom"
+      [(ngModel)]="adherentToUpdate.nom" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Prenom" aria-label="Prenom"
+      [(ngModel)]="adherentToUpdate.prenom" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Adresse" aria-label="Adresse"
+      [(ngModel)]="adherentToUpdate.adresse" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Email" aria-label="Email"
+      [(ngModel)]="adherentToUpdate.email" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+ 
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Telephone" aria-label="Telephone"
+      [(ngModel)]="adherentToUpdate.telephone" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Nationnalite" aria-label="Nationnalite"
+      [(ngModel)]="adherentToUpdate.nationnalite" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Langue" aria-label="Langue"
+      [(ngModel)]="adherentToUpdate.langues" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="updateAdherent()">Modifier</button>
+    <button type="button" class="btn btn-danger" (click)="bsModalRef.hide()">Annuler</button>
+  </div>
+</ng-template>
+<!---------------------------------------------------delete modal*******************************-->
+<ng-template #deleteTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Suppression d'un adherent {{adherentToDelete.nom}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    Vous étes sure de supprimer l'adherent {{adherentToDelete.nom}}?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="deleteAdherent()">OUI</button>
+    <button type="button" class="btn btn-danger" (click)="bsModalRef.hide()">NON</button>
+  </div>
+</ng-template>
+
+<!---------------------------------------------------reglage modal*******************************-->
+<ng-template #reglageTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Selectionnez les colonnes à afficher dans la table</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showPhoto">
+        Photo
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showNom" [ngModelOptions]="{standalone: true}">
+        Nom
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showPrenom" [ngModelOptions]="{standalone: true}">
+        Prenom
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showAdresse" [ngModelOptions]="{standalone: true}">
+        Adresse
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showEmail" [ngModelOptions]="{standalone: true}">
+        Email
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showPassword" [ngModelOptions]="{standalone: true}">
+        Password
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showTel" [ngModelOptions]="{standalone: true}">
+        Telephone
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showNationnalite"
+          [ngModelOptions]="{standalone: true}">
+        Nationnalite
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showLangue" [ngModelOptions]="{standalone: true}">
+        Langue
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showAjout" [ngModelOptions]="{standalone: true}">
+        Date d'ajout
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showModification"
+          [ngModelOptions]="{standalone: true}">
+        Date de modification
+        <i class="input-helper"></i></label>
+    </div>
+  </div>
+</ng-template>
+<!---------------------------------------------------message modal*******************************-->
+
+<ng-template #msgTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Envoyer un message</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide(); tryToSubmit=false;">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="message" aria-label="message"
+      intitule="ngModel" [(ngModel)]="message" required #messageAdd="ngModel">
+    <div *ngIf="messageAdd.errors && (messageAdd.dirty || messageAdd.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="sendMessage()">Envoyer</button>
+    <button type="button" class="btn btn-danger" (click)="bsModalRef.hide(); tryToSubmit=false;">Annuler</button>
+  </div>
+</ng-template>

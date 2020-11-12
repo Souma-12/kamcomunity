@@ -3,6 +3,7 @@ export class Association {
 
     nom;
     presentation;
+    email;
     siteWeb;
     adresse;
     taille;

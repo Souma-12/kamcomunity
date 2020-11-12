@@ -1,3 +1,5 @@
+import { RoleStatus } from './RoleStatus';
+
 export class Utilisateur {
     id_utilisateur;
     email;
@@ -8,7 +10,9 @@ export class Utilisateur {
     adresse;
     nationalite;
     langue;
-
+    dateModif;
+    dateAjout;
+    role: RoleStatus;
     
    
 }

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NgxSpinnerService } from "ngx-spinner";
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { AuthenticationService } from 'src/app/services/AuthenticationService';
+import { CookieService } from 'ngx-cookie-service';
 
 
 @Component({
@@ -20,16 +21,20 @@ export class LoginComponent implements OnInit {
   username ;
   password ;
   invalidLogin = false;
+ 
   
   @Input() error: string | null;
 
   constructor(private spinner:NgxSpinnerService,private loginservice: AuthenticationService, private http:HttpClient,
-     private utilisateurService:UtilisateurService,private router: Router,private formBuilder:FormBuilder) { 
+     private utilisateurService:UtilisateurService,private router: Router,
+     private formBuilder:FormBuilder,private cookieService: CookieService) { 
      
       
   }
   
   ngOnInit() {
+    
+   
     this.formLogin = this.formBuilder.group({
       username: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]})
@@ -41,13 +46,20 @@ export class LoginComponent implements OnInit {
 
     this.loginservice.authenticate(this.formLogin.controls.username.value, this.formLogin.controls.password.value).subscribe(
       data => {
-        console.log("zzz",data);
-
-        this.router.navigate(['/'])
-        this.invalidLogin = false
+        if (data.token!=null){
+          console.log("data =",data);
+          this.cookieService.set( 'accessToken', 'Bearer '+  data.token );
+          this.cookieService.set( 'login', data.username);
+          this.router.navigate(['/principal']);
+          this.invalidLogin = false;
+        }
+        else{
+          this.invalidLogin=true;
+        }
+       
       },
       error => {
-        this.invalidLogin = true
+        this.invalidLogin = true;
         this.error = error.message;
 
       }

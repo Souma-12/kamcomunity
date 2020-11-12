@@ -1,1 +1,253 @@
-<p>don works!</p>
+<h2>La liste des dons</h2>
+<div style="float: right;">
+  <div style="display: inline-block; margin-right: 10px;" *ngIf="loggedUser.role.role =='ADHERENT'">
+    <button class="btn btn-success" (click)="showAddModal(addTemplate)">Ajouter don</button>
+  </div>
+
+  <div style="display: inline-block; margin-right: 10px;">
+    <button class="btn btn-secondary" (click)="showFilter()">Filtre<span class="ti-filter"></span></button>
+  </div>
+  <div style="display: inline-block;">
+    <button class="btn btn-warning" (click)="changeSettings(reglageTemplate)">Réglage <span
+        class="ti-settings"></span></button>
+  </div>
+</div>
+<div style="width:100%; margin-top: 50px;">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th *ngIf="showIdUtilisateur">
+          <ng-container *ngIf="!filter">Adherent</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="id utilisateur" [(ngModel)]="idUtilisateurFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf=" showIdAssociation">
+          <ng-container *ngIf="!filter">Association</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="id association" [(ngModel)]="idAssociationFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showMontant">
+          <ng-container *ngIf="!filter">Montant</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Montant" [(ngModel)]="montantFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showIdUtilisateur">
+          <ng-container *ngIf="!filter">IdUtilisateur</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="IdUtilisateur" [(ngModel)]="idUtilisateurFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showIdAssociation">
+          <ng-container *ngIf="!filter">IdAssociation</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="IdAssociation" [(ngModel)]="idAssociationFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showDescription">
+          <ng-container *ngIf="!filter">Description</ng-container>
+          <ng-container *ngIf="filter"><input type="text" placeholder="Description" [(ngModel)]="descriptionFilter"
+              [ngModelOptions]="{standalone: true}" #intit="ngModel"></ng-container>
+        </th>
+        <th *ngIf="showAjout">
+          <ng-container *ngIf="!filter">Date d'ajout</ng-container>
+          <ng-container *ngIf="filter"><input type="date" placeholder="Date d'ajout" [(ngModel)]="dateAjoutFilter"
+              [ngModelOptions]="{standalone: true}" #dtajout="ngModel"></ng-container>
+        </th>
+
+        <th> Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let don of dons |filterMontantDon:montantFilter|filterDescriptionDon:descriptionFilter|
+        filterAjoutDon:dateAjoutFilter|filterIdUtilisateurDon:idUtilisateurFilter|
+        filterIdAssociationDon:idAssociationFilter">
+        <td class="py-1" *ngIf="showMontant">{{don.montant}}</td>
+        <td *ngIf="showDescription">{{don.description}}</td>
+        <td *ngIf="showIdUtilisateur" >{{don.id_utilisateur}}</td>
+        <td *ngIf="showIdAssociation">{{don.id_association}}</td>
+        <td *ngIf="showAjout">{{don.dateAjout | date : 'yyyy-MM-dd'}}</td>
+        <td>
+          <span title="Modifier" class="fa fa-edit" style="cursor: pointer; margin-right: 20px;color:green"
+            (click)="showUpdateModal(updateTemplate, don)"></span>
+          <span title="Supprimer" class="fa fa-trash" style="cursor: pointer; color: red;"
+            (click)="showDeleteModal(deleteTemplate, don)"></span>
+            <span title="Message" class="fa fa-comments" style="cursor: pointer;  margin-right:10px;  color: blue;"
+            (click)="showMessageModel(msgTemplate,don)"></span>
+            <span style="display: inline-block; margin-right: 10px;margin-left: 10px; " class="btn btn-success"
+             (click)="showSommeModal(templateSomme, don.utilisateur.id_utilisateur)">Somme
+            </span>
+            <span *ngIf="loggedUser.role.role==='SUPERADMIN'", style="display: inline-block; margin-right: 10px;margin-left: 10px; " class="btn btn-success"
+            (click)="showSommeAssociationModal(templateSomme, don.utilisateur.id_association)">Somme
+           </span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!--****************************************Add modal**********************************-->
+<ng-template #addTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Ajout d'un don</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide(); tryToSubmit=false;">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Montant" aria-label="Montant" nom="ngModel"
+      [(ngModel)]="donToAdd.montant" required #intitAdd="ngModel">
+    <div *ngIf="intitAdd.errors && (intitAdd.dirty || intitAdd.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Description" aria-label="Description"
+      prenom="ngModel" [(ngModel)]="donToAdd.description" required #intitAdd="ngModel">
+    <div *ngIf="intitAdd.errors && (intitAdd.dirty || intitAdd.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="addDon()">Ajouter</button>
+    <button type="button" class="btn btn-danger" (click)="bsModalRef.hide(); tryToSubmit=false;">Annuler</button>
+  </div>
+</ng-template>
+<!--****************************************Somme modal**********************************-->
+<ng-template #templateSomme >
+  <div class="modal-header" *ngIf="sumByUser">
+    <h4 class="modal-title pull-left">user {{sumByUser.user}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    Somme  {{sumByUser.sum}}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="bsModalRef.hide()">OK</button>
+  </div>
+</ng-template>
+<!--****************************************SommeAssociation modal**********************************-->
+<ng-template #templateSomme >
+  <div class="modal-header" *ngIf="sumByAssociation">
+    <h4 class="modal-title pull-left">association {{sumByAssociation.association}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    Somme  {{sumByAssociation.sum}}
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="bsModalRef.hide()">OK</button>
+  </div>
+</ng-template>
+<!---------------------------------------------------update modal*******************************-->
+<ng-template #updateTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modification d'un don {{donToUpdate.montant}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close"
+      (click)="bsModalRef.hide(); this.tryToSubmit = false">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Montant" aria-label="Montant"
+      [(ngModel)]="donToUpdate.montant" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="Description" aria-label="Description"
+      [(ngModel)]="donToUpdate.description" required #intitUp="ngModel">
+    <div *ngIf="intitUp.errors && (intitUp.dirty || intitUp.touched ||tryToSubmit)" class="alert alert-danger">
+      <div>
+        Champ obligatoire!
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="updateDon()">Modifier</button>
+    <button type="button" class="btn btn-danger" (click)="bsModalRef.hide()">Annuler</button>
+  </div>
+</ng-template>
+<!---------------------------------------------------delete modal*******************************-->
+<ng-template #deleteTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Suppression d'un don{{donToDelete.montant}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    Vous étes sure de supprimer cet don {{donToDelete.montant}?
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="deleteDon()">OUI</button>
+    <button type="button" class="btn btn-danger" (click)="bsModalRef.hide()">NON</button>
+  </div>
+</ng-template>
+
+<!---------------------------------------------------reglage modal*******************************-->
+<ng-template #reglageTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Selectionnez les colonnes à afficher dans la table</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showMontant" [ngModelOptions]="{standalone: true}">
+        Montant
+        <i class="input-helper"></i></label>
+    </div>
+    <div class="form-check form-check-primary">
+        <label class="form-check-label">
+          <input type="checkbox" class="form-check-input" [(ngModel)]="showDescription" [ngModelOptions]="{standalone: true}">
+          Description
+          <i class="input-helper"></i></label>
+      </div>
+     
+    <div class="form-check form-check-primary">
+      <label class="form-check-label">
+        <input type="checkbox" class="form-check-input" [(ngModel)]="showAjout" [ngModelOptions]="{standalone: true}">
+        Date d'ajout
+        <i class="input-helper"></i></label>
+    </div>
+   
+  </div>
+</ng-template>
+<!---------------------------------------------------envoyer message*******************************-->
+<ng-template #msgTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Envoyer un message</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="bsModalRef.hide(); tryToSubmit=false;">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <input type="text" class="form-control form-control-sm" placeholder="message" aria-label="message"
+    intitule="ngModel" [(ngModel)]="message" required #messageAdd="ngModel">
+    <div *ngIf="messageAdd.errors && (messageAdd.dirty || messageAdd.touched ||tryToSubmit)"
+    class="alert alert-danger">
+    <div>
+      Champ obligatoire!
+    </div>
+  </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="sendMessage()">Envoyer</button>
+    <button type="button" class="btn btn-danger" (click)="bsModalRef.hide(); tryToSubmit=false;">Annuler</button>
+  </div>
+</ng-template>
+

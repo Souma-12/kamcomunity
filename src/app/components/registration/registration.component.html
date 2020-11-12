@@ -3,89 +3,128 @@ background-size: cover;
 background-repeat: no-repeat;
 height: 821px;
 font-family: 'Numans', sans-serif;">
-<div class="container-flex">
-	<div class="d-flex justify-content-center h-100">
-		<div class="card">
-			<div class="card-header">
-				<h3>Sign In</h3>
-				<div class="d-flex justify-content-end social_icon">
-					<span><i class="fab fa-facebook-square"></i></span>
-					<span><i class="fab fa-google-plus-square"></i></span>
-					<span><i class="fab fa-twitter-square"></i></span>
+	<div class="container-flex">
+		<div class="d-flex justify-content-center h-100">
+			<div class="card">
+				<div class="card-header">
+					<h3>Sign In</h3>
+					<div class="d-flex justify-content-end social_icon">
+						<span><i class="fa fa-facebook-square"></i></span>
+						<span><i class="fa fa-google-plus-square"></i></span>
+						<span><i class="fa fa-twitter-square"></i></span>
+					</div>
 				</div>
-			</div>
-			<div class="card-body">
-				<form [formGroup]="formReg" (ngSubmit)="registration()">
-					<div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-user"></i></span>
+				<div class="card-body">
+					<form [formGroup]="formReg" (ngSubmit)="registration()">
+						<div class="row">
+							<div class="col-md-6">
+								<div class="input-group form-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="fa fa-2x fa-user"></i></span>
+									</div>
+									<input type="text" class="form-control taille" formControlName="nom"
+										placeholder="nom">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="input-group form-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text">
+											<i class="fa fa-2x fa-user"></i></span>
+									</div>
+									<input type="text" class="form-control taille" formControlName="prenom"
+										placeholder="prenom">
+								</div>
+							</div>
 						</div>
-						<input type="text" class="form-control" formControlName="nom" placeholder="nom">
-						
-                    </div>
-                    <div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-user"></i></span>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="input-group form-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="fa fa-2x fa-phone"></i></span>
+									</div>
+									<input type="tel" class="form-control taille" formControlName="telephone"
+										placeholder="telephone">
+
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="input-group form-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+												class="fa fa-2x fa-envelope-square"></i></span>
+									</div>
+									<input type="text" class="form-control taille" formControlName="email"
+										placeholder="email">
+								</div>
+							</div>
 						</div>
-						<input type="text" class="form-control" formControlName="prenom" placeholder="prenom">
-						
-                    </div>
-                    <div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-phone"></i></span>
+
+						<div class="row">
+							<div class="col-md-6">
+								<div class="input-group form-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="fa fa-address-card"
+												aria-hidden="true"></i></span>
+									</div>
+									<select class="form-username form-control taille" formControlName="nationnalite"
+										id="nationnalite">
+										<option [ngValue]=null selected>Nationnalité</option>
+										<option *ngFor="let pays of paysList" [ngValue]="pays">{{pays}}</option>
+									</select>
+
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="input-group form-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i
+												class="fa fa-2x fa-envelope-square"></i></span>
+									</div>
+									<input type="text" class="form-control taille" formControlName="adresse"
+										placeholder="adresse">
+								</div>
+
+							</div>
 						</div>
-						<input type="tel" class="form-control" formControlName="telephone" placeholder="telephone">
-						
-					</div>
-                    <div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="input-group form-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="fa fa-2x fa-key"></i></span>
+									</div>
+									<input type="password" formControlName="password" class="form-control taille"
+										placeholder="password">
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="input-group form-group">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="fa fa-2x fa-picture-o"
+												aria-hidden="true"></i></span>
+									</div>
+									<input type="file" accept="image/*" formControlName="photo"
+										class="form-control taille" placeholder="photo"
+										accept="image/x-png,image/gif,image/jpeg"
+										(change)="handleImageUtilisateurInput($event.target.files)">
+
+								</div>
+							</div>
 						</div>
-						<input type="text" class="form-control" formControlName="email" placeholder="email">
-						
-					</div>
-                    <div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
+						<div class="form-group">
+							<input type="submit" value="Registration" class="btn float-right login_btn">
 						</div>
-						<input type="text" class="form-control" formControlName="adresse" placeholder="adresse">
-						
-					</div>
-                    <div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-envelope-square"></i></span>
-						</div>
-						<select name="langue" formControlName="langue" id="langue" placeholder="langue">
-                            <option value="Fr">Francais</option>
-                            <option value="En">Anglais</option>
-                            <option value="Deutsh">Allemand</option>
-                        </select>
-						
-					</div>
-                    
-					<div class="input-group form-group">
-						<div class="input-group-prepend">
-							<span class="input-group-text"><i class="fas fa-key"></i></span>
-						</div>
-						<input type="password" class="form-control" placeholder="password">
-					</div>
-					<div class="row align-items-center remember">
-						<input type="checkbox">Remember Me
-					</div>
-					<div class="form-group">
-						<input type="submit" value="Registration" class="btn float-right login_btn">
-					</div>
-				</form>
-			</div>
-			<div class="card-footer">
-				<div class="d-flex justify-content-center links">
-				 Have an account?<a [routerLink]="['/login']" class="bold">Sign In</a>
+					</form>
 				</div>
-				<div class="d-flex justify-content-center">
-					<a href="#">Forgot your password?</a>
+				<div class="card-footer">
+					<div class="d-flex justify-content-center links">
+						Have an account?<a [routerLink]="['/login']" class="bold">Login</a>
+					</div>
+					<!-- <div class="d-flex justify-content-center">
+						<a href="#">Forgot your password?</a>
+					</div> -->
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
 </div>

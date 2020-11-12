@@ -12,6 +12,7 @@ export class AssociationComponent implements OnInit {
   constructor(private modalService: BsModalService,private toastr: ToastrService, private associationService: AssociationService) { }
 
   ngOnInit() {
+    this.getAll();
   }
 
   filter = false;
@@ -27,7 +28,7 @@ export class AssociationComponent implements OnInit {
   showType = true;
   showAdresse = true;
   showPays = false;
-  showLogo = true;
+  showPhoto = true;
   showModification = false;
   associationToDelete;
   associations;
@@ -37,7 +38,7 @@ export class AssociationComponent implements OnInit {
   siteFilter = '';
   tailleFilter = '';
   adresseFilter = '';
-  typeFilter = '';
+  photoFilter = '';
   emailFilter = '';
   paysFilter = '';
   fondationFilter = '';
@@ -64,10 +65,10 @@ export class AssociationComponent implements OnInit {
   deleteAssociation() {
     this.associationService.deleteAssociation(this.associationToDelete.id).subscribe(res => {
       this.bsModalRef.hide();
-      this.toastr.success('Succés!', 'Employeur supprimé avec succés!');
+      this.toastr.success('Succés!', 'Association supprimé avec succés!');
       this.getAll();
     }, error => {
-      this.toastr.error('Erreur!', 'Erreur lors de suppression de l\'employeur');
+      this.toastr.error('Erreur!', 'Erreur lors de suppression de l\'association');
     });
   }
 

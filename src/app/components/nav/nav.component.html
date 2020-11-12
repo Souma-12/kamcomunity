@@ -1,1 +1,83 @@
-<p>nav works!</p>
+<nav class="sidebar sidebar-offcanvas" id="sidebar" style="height:100%;">
+  <ul class="nav">
+
+    <!--************************************************menu pour superadmin*******************************-->
+     <li class="nav-item" *ngIf="loggedUser && loggedUser.role.role === 'SUPERADMIN'">
+      <a class="nav-link" [routerLink]="['/principal', {outlets: {child1: ['association']}}]">
+        <i class="fa fa-users menu-icon"></i>
+        <span class="menu-title">Liste des associations</span>
+      </a>
+    </li>
+    <li class="nav-item" *ngIf="loggedUser && loggedUser.role.role === 'SUPERADMIN'">
+      <a class="nav-link" [routerLink]="['/principal', {outlets: {child1: ['admin']}}]">
+        <i class="fa fa-users menu-icon"></i>
+        <span class="menu-title">Liste des admins</span>
+      </a>
+    </li>
+    <li class="nav-item" *ngIf="loggedUser && loggedUser.role.role === 'SUPERADMIN'">
+      <a class="nav-link" [routerLink]="['/principal', {outlets: {child1: ['adherent']}}]">
+        <i class="fa fa-users menu-icon"></i>
+        <span class="menu-title">Liste des adherents</span>
+      </a>
+    </li>
+    <li class="nav-item" *ngIf="loggedUser && loggedUser.role.role === 'SUPERADMIN'">
+      <a class="nav-link" [routerLink]="['/principal', {outlets: {child1: ['don']}}]">
+        <i class="fa fa-users menu-icon"></i>
+        <span class="menu-title">Liste des dons</span>
+      </a>
+    </li> 
+   
+   
+    
+<!--************************************************menu pour adherent*******************************-->
+
+<li class="nav-item" *ngIf="loggedUser && loggedUser.role.role === 'ADHERENT'">
+  <a class="nav-link" [routerLink]="['/principal', {outlets: {child1: ['association']}}]">
+    <i class="ti-menu menu-icon"></i>
+    <span class="menu-title">Mon association</span>
+  </a>
+</li>
+<li class="nav-item" *ngIf="loggedUser && loggedUser.role.role === 'ADHERENT'">
+  <a class="nav-link" [routerLink]="['/principal', {outlets: {child1: ['don']}}]">
+    <i class="ti-id-badge menu-icon"></i>
+    <span class="menu-title">Liste des mes dons</span>
+  </a>
+</li> 
+
+
+
+
+<!--************************************************menu pour admin*******************************-->
+
+<li class="nav-item" *ngIf="loggedUser && loggedUser.role.role === 'ADHERENT'">
+  <a class="nav-link" [routerLink]="['/principal', {outlets: {child1: ['association']}}]">
+    <i class="ti-menu menu-icon"></i>
+    <span class="menu-title">Mon association</span>
+  </a>
+</li>
+
+<li class="nav-item"  *ngIf="loggedUser && loggedUser.role.role === 'ADMIN'">
+  <a class="nav-link" [routerLink]="['/principal', {outlets: {child1: ['adherent']}}]">
+    <i class="ti-list menu-icon"></i>
+    <span class="menu-title">Mes adherents</span>
+  </a>
+</li>
+<li class="nav-item" *ngIf="loggedUser && loggedUser.role.role === 'ADMIN'">
+  <a class="nav-link" [routerLink]="['/principal', {outlets: {child1: ['don']}}]">
+    <i class="ti-id-badge menu-icon"></i>
+    <span class="menu-title">Liste des dons</span>
+  </a>
+</li> 
+
+
+
+<!--***********************************************munu commun**************************************-->
+<li class="nav-item">
+  <a class="nav-link" [routerLink]="['/principal', {outlets: {child1: ['profil']}}]">
+    <i class="fa fa-users menu-icon"></i>
+    <span class="menu-title">Mon profil</span>
+  </a>
+</li>
+
+  </ul>
+</nav>

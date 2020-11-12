@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'filterTypeAssociation'
+  name: 'filterNomAdherent'
 })
-export class FilterTypeAssociationPipe implements PipeTransform {
+export class FilterNomAdherentPipe implements PipeTransform {
 
   transform(items: any[], value: any): any {
     if (!items) {
@@ -13,9 +13,10 @@ export class FilterTypeAssociationPipe implements PipeTransform {
       return items;
     }
     return items.filter(it => {
-      const typeTest = it.type.toString().toLowerCase().includes(value.toLowerCase());
-      return (typeTest);
+      const nomTest = it.nom.toString().toLowerCase().includes(value.toLowerCase());
+      return (nomTest);
     });
   }
 
 }
+

@@ -1,106 +1,111 @@
 <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-      <a class="navbar-brand brand-logo mr-5" href="#">
-        <div class="login-title">
-          <h2><span>Kam<strong>comunity</strong></span></h2>
+  <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+    <a class="navbar-brand brand-logo mr-5" href="#">
+      <div class="login-title">
+        <h2><span>Kam<strong>comunity</strong></span></h2>
+      </div>
+    </a>
+    <a class="navbar-brand brand-logo-mini" href="#">
+    </a>
+  </div>
+  <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+    <ul class="navbar-nav navbar-nav-right" id="menu-vertical">
+
+      <li class="nav-item nav-profile dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown" aria-expanded="false">
+          <img src="data:image/jpg;base64,{{loggedUser.photo}}" *ngIf="loggedUser && loggedUser.photo"
+          style="width:30px; height:30px;" alt="image" class="zoom">
+         <img src="../../../assets/images/faces/face21.jpg" *ngIf="loggedUser && !loggedUser.photo || !loggedUser"
+          style="width:30px; height:30px;" alt="image" class="zoom">
+        </a> 
+      </li>
+      <li class="nav-item nav-profile dropdown" *ngIf="loggedUser && loggedUser.nom">
+        <a class="nav-link dropdown-toggle" [routerLink]="['/principal', {outlets: {child1: ['profil']}}]" href="#"
+          data-toggle="dropdown" id="profileDropdown" aria-expanded="false">
+          <span>{{loggedUser.nom}} </span>
+          <span *ngIf="loggedUser.role.role == 'ADHERENT'">{{loggedUser.prenom}}</span>
+        </a>
+      </li>
+      <li class="nav-item nav-profile dropdown" *ngIf="loggedUser && !loggedUser.nom && loggedUser.role !== 'ADMIN'">
+        <a class="nav-link dropdown-toggle" [routerLink]="['/principal', {outlets: {child1: ['profil']}}]" href="#"
+          data-toggle="dropdown" id="profileDropdown" aria-expanded="false">
+          <span>Utilisateur Inconnu</span>
+        </a>
+      </li>
+      <li class="nav-item nav-profile dropdown" *ngIf="loggedUser && !loggedUser.nom && loggedUser.role.role === 'SUPERADMIN'">
+        <a class="nav-link dropdown-toggle" [routerLink]="['/principal', {outlets: {child1: ['profil']}}]" href="#"
+          data-toggle="dropdown" id="profileDropdown" aria-expanded="false">
+          <span>SUPERADMIN</span>
+        </a>
+      </li>
+      <li class="nav-item nav-profile dropdown" *ngIf="loggedUser && !loggedUser.nom && loggedUser.role === 'ADMIN'">
+        <a class="nav-link dropdown-toggle" [routerLink]="['/principal', {outlets: {child1: ['profil']}}]" href="#"
+          data-toggle="dropdown" id="profileDropdown" aria-expanded="false">
+          <span>ADMIN</span>
+        </a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
+          <i class="fa fa-envelope"></i>
+          <span *ngIf ="messages" class="count"></span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notificationDropdown">
+          <p class="mb-0 font-weight-normal float-left dropdown-header">Message</p>
+
+          <a class="dropdown-item" *ngFor="let message of messages">
+            <div class="item-thumbnail">
+              <div class="item-icon bg-warning">
+                <img src="data:image/jpg;base64,{{message.sender.photo}}" *ngIf="loggedUser && loggedUser.photo"
+                style="width:30px; height:30px;">
+              </div>
+            </div>
+            <div class="item-content">
+              <h6 class="font-weight-normal">{{message.sender.nom}}</h6>
+              <p class="font-weight-light small-text mb-0 text-muted">
+                {{message.message}}
+              </p>
+            </div>
+          </a>
         </div>
-      </a>
-      <a class="navbar-brand brand-logo-mini" href="#">
-      </a>
-    </div>
-    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
-      <ul class="navbar-nav navbar-nav-right" id="menu-vertical">
-  
-        <li class="nav-item nav-profile dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown" aria-expanded="false">
-            <img src="data:image/jpg;base64,{{loggedUser.photo}}" *ngIf="loggedUser && loggedUser.photo"
-            style="width:30px; height:30px;">
-          <img src="../../../assets/images/faces/face21.jpg" *ngIf="!loggedUser.photo || !loggedUser"
-            style="width:30px; height:30px;">
-          </a> 
-        </li>
-        <li class="nav-item nav-profile dropdown" *ngIf="loggedUser.nom">
-          <a class="nav-link dropdown-toggle" [routerLink]="['/principal', {outlets: {child1: ['profil']}}]" href="#"
-            data-toggle="dropdown" id="profileDropdown" aria-expanded="false">
-            <span>{{loggedUser.nom}} </span>
-            <span *ngIf="loggedUser.role == 'CANDIDAT'">{{loggedUser.prenom}}</span>
-          </a>
-        </li>
-        <li class="nav-item nav-profile dropdown" *ngIf="!loggedUser.nom && loggedUser.role !== 'ADMIN'">
-          <a class="nav-link dropdown-toggle" [routerLink]="['/principal', {outlets: {child1: ['profil']}}]" href="#"
-            data-toggle="dropdown" id="profileDropdown" aria-expanded="false">
-            <span>Utilisateur Inconnu</span>
-          </a>
-        </li>
-        <li class="nav-item nav-profile dropdown" *ngIf="!loggedUser.nom && loggedUser.role === 'ADMIN'">
-          <a class="nav-link dropdown-toggle" [routerLink]="['/principal', {outlets: {child1: ['profil']}}]" href="#"
-            data-toggle="dropdown" id="profileDropdown" aria-expanded="false">
-            <span>ADMIN</span>
-          </a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#" data-toggle="dropdown">
-            <i class="ti-bell mx-0"></i>
-            <span *ngIf ="messages" class="count"></span>
-          </a>
-          <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="notificationDropdown">
-            <p class="mb-0 font-weight-normal float-left dropdown-header">Message</p>
-  
-            <a class="dropdown-item" *ngFor="let message of messages">
-              <div class="item-thumbnail">
-                <div class="item-icon bg-warning">
-                  <img src="data:image/jpg;base64,{{message.sender.photo}}" *ngIf="loggedUser && loggedUser.photo"
-                  style="width:30px; height:30px;">
-                </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link count-indicator dropdown-toggle" id="languageDropdown" href="#" data-toggle="dropdown">
+          Francais-FR
+        </a>
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="languageDropdown">
+          <a class="dropdown-item">
+            <div class="item-thumbnail">
+              <div class="item-icon">
+                <i class="flag-icon flag-icon-fr flag-icon-squared"></i>
               </div>
-              <div class="item-content">
-                <h6 class="font-weight-normal">{{message.sender.nom}}</h6>
-                <p class="font-weight-light small-text mb-0 text-muted">
-                  {{message.message}}
-                </p>
-              </div>
-            </a>
-          </div>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link count-indicator dropdown-toggle" id="languageDropdown" href="#" data-toggle="dropdown">
-            FR
+            </div>
+            <div class="item-content">
+              <h6 class="font-weight-normal">Français</h6>
+            </div>
           </a>
-          <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="languageDropdown">
-            <a class="dropdown-item">
-              <div class="item-thumbnail">
-                <div class="item-icon">
-                  <i class="flag-icon flag-icon-fr flag-icon-squared"></i>
-                </div>
+          <a class="dropdown-item">
+            <div class="item-thumbnail">
+              <div class="item-icon">
+                <span class="flag-icon flag-icon-gb flag-icon-squared"></span>
               </div>
-              <div class="item-content">
-                <h6 class="font-weight-normal">Français</h6>
-              </div>
-            </a>
-            <a class="dropdown-item">
-              <div class="item-thumbnail">
-                <div class="item-icon">
-                  <span class="flag-icon flag-icon-gb flag-icon-squared"></span>
-                </div>
-              </div>
-              <div class="item-content">
-                <h6 class="font-weight-normal">Anglais</h6>
-              </div>
-            </a>
-          </div>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" (click)="clearStorage()" [routerLink]="['/login']"
-            data-toggle="dropdown">
-            <i class="ti-power-off"></i>
-            <!-- <span class="count"></span> -->
+            </div>
+            <div class="item-content">
+              <h6 class="font-weight-normal">Deutsh</h6>
+            </div>
           </a>
-        </li>
-      </ul>
-      <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-        data-toggle="offcanvas">
-        <span class="ti-view-list"></span>
-      </button>
-    </div>
-  </nav>
-  
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" (click)="clearStorage()" [routerLink]="['/login']"
+          data-toggle="dropdown">
+          <i class="fa fa-power-off"></i>
+          <span class="count"></span>
+        </a>
+      </li>
+    </ul>
+    <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+      data-toggle="offcanvas">
+      <span class="ti-view-list"></span>
+    </button>
+  </div>
+</nav>
